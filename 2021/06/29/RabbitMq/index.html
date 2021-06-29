@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Eason" />
+  <meta name="keywords" content="工具," />
 
 
 
@@ -79,12 +79,17 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="孙毅的博客">
-<meta property="og:url" content="http://example.com/index.html">
+<meta name="description" content="RabbitMq 学习这两天看了下RabbitMq.整理下一些基本的安装和使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RabbitMq学习">
+<meta property="og:url" content="http://example.com/2021/06/29/RabbitMq/index.html">
 <meta property="og:site_name" content="孙毅的博客">
+<meta property="og:description" content="RabbitMq 学习这两天看了下RabbitMq.整理下一些基本的安装和使用">
 <meta property="og:locale">
+<meta property="article:published_time" content="2021-06-29T08:25:09.977Z">
+<meta property="article:modified_time" content="2021-06-29T08:25:09.977Z">
 <meta property="article:author" content="Eason">
+<meta property="article:tag" content="工具">
 <meta name="twitter:card" content="summary">
 
 
@@ -115,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://example.com/"/>
+  <link rel="canonical" href="http://example.com/2021/06/29/RabbitMq/"/>
 
 
 
 
 
-  <title>孙毅的博客</title>
+  <title>RabbitMq学习 | 孙毅的博客</title>
   
 
 
@@ -140,8 +145,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -244,9 +248,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -276,9 +280,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/06/29/RabbitMq/" itemprop="url">RabbitMq学习</a></h1>
+          <h1 class="post-title" itemprop="name headline">RabbitMq学习</h1>
         
 
         <div class="post-meta">
@@ -352,16 +354,43 @@
       
 
       
-        
-          <h1 id="RabbitMq-学习"><a href="#RabbitMq-学习" class="headerlink" title="RabbitMq 学习"></a>RabbitMq 学习</h1><p>这两天看了下RabbitMq.整理下一些基本的安装和使用</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2021/06/29/RabbitMq/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
+        <h1 id="RabbitMq-学习"><a href="#RabbitMq-学习" class="headerlink" title="RabbitMq 学习"></a>RabbitMq 学习</h1><p>这两天看了下RabbitMq.整理下一些基本的安装和使用</p>
+<span id="more"></span>
+<h2 id="一、安装"><a href="#一、安装" class="headerlink" title="一、安装"></a>一、安装</h2><p>我是使用docker-compose 来构建的rabbitMq容器。因为是练手，所以只配置了单机版。<br>操作起来很简单。docker-compose.yml文件中添加</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">version: &#x27;2&#x27;</span><br><span class="line">services:</span><br><span class="line">    rabbitmq:</span><br><span class="line">         image: rabbitmq:3.6.12-management</span><br><span class="line">         container_name: rabbitmq</span><br><span class="line">     #使用数据卷未起作用</span><br><span class="line">         volumes:</span><br><span class="line">           - /Users/sunyi/www/docker_env/data/:/var/rabbitmq/lib</span><br><span class="line">         restart: always</span><br><span class="line">         ports:</span><br><span class="line">           - 15712:15672</span><br><span class="line">           - 5672:5672</span><br><span class="line">         environment:</span><br><span class="line">           RABBITMQ_DEFAULT_USER: root #默认为guest</span><br><span class="line">           RABBITMQ_DEFAULT_PASS: root #默认为guest</span><br></pre></td></tr></table></figure>
+<p>然后在该文件目录下docker-compose up -d 运行即可。<br>要使用命令行运行的话只需进入容器进行操作即可 docker exec -it container_name /bin/bash</p>
+<h2 id="二、php扩展安装"><a href="#二、php扩展安装" class="headerlink" title="二、php扩展安装"></a>二、php扩展安装</h2><p>要使用php操作RabbitMq的话需要在php容器配置中增加相应的链接links 和依赖depends_on </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">php:</span><br><span class="line">   image: php-local</span><br><span class="line">   container_name: php</span><br><span class="line">   ports:</span><br><span class="line">       - 9000:9000</span><br><span class="line">   expose:</span><br><span class="line">       - 9000</span><br><span class="line">   links:</span><br><span class="line">       - mysql:mysql_server</span><br><span class="line">       - redis:redis_server</span><br><span class="line">       - rabbitmq:rabbitmq_server</span><br><span class="line">   depends_on:</span><br><span class="line">       - mysql</span><br><span class="line">       - redis</span><br><span class="line">       - rabbitmq</span><br></pre></td></tr></table></figure>
+<p>当然要用php操作RabbitMq 需要安装php的amqp扩展。docker现在默认不支持该扩展。可以先在本地下载下相应的扩展包。<a target="_blank" rel="noopener" href="https://pecl.php.net/get/amqp-1.6.1.tgz">https://pecl.php.net/get/amqp-1.6.1.tgz</a>  相应版本自己选择。 </p>
+<p>在本地解压后通过docker cp命令上传到容器中的php ext扩展包文件下。然后执行docker-php-ext-install amqp。   </p>
+<p>一般情况下docker会成功安装上（这个命令其实相当于 phpize ./configure make &amp;&amp; make install）。但是在安装amqp扩展时报错了。是因为amqp扩展依赖rabbitmq-c库。所以需要先安装rabbitmq-c类库。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/alanxz/rabbitmq-c/releases/download/v0.8.0/rabbitmq-c-0.8.0.tar.gz">https://github.com/alanxz/rabbitmq-c/releases/download/v0.8.0/rabbitmq-c-0.8.0.tar.gz</a></p>
+<p>操作过程跟上面类似。。。。</p>
+<p>安装完后再进入容器安装amqp扩展。自己手动执行。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">    cd amqp</span><br><span class="line">    phpize</span><br><span class="line">    ./configure --with-php-config=/usr/local/bin/php-config --with-amqp --with-librabbitmq-dir=/usr/local/librabbitmq</span><br><span class="line">（php-config路径是容器的php-config路径</span><br><span class="line">librabbitmq路径是刚才安装的rabbitmq-c类库的路径。）</span><br><span class="line">    make &amp;&amp; make install    </span><br></pre></td></tr></table></figure>
+<p>然后修改php.ini文件。reload nginx 。php -m查看是否有amqp扩展。</p>
+<h2 id="三、使用"><a href="#三、使用" class="headerlink" title="三、使用"></a>三、使用</h2><pre><code>### 在使用前需要了解RabbitMQ几个基本概念
+* Broker：简单来说就是消息队列服务器实体。
+* Exchange：消息交换机，它指定消息按什么规则，路由到哪个队列。
+* Queue：消息队列载体，每个消息都会被投入到一个或多个队列。
+* Binding：绑定，它的作用就是把exchange和queue按照路由规则绑定起来。
+* Routing Key：路由关键字，exchange根据这个关键字进行消息投递。
+* vhost：虚拟主机，一个broker里可以开设多个vhost，用作不同用户的权限分离。
+* producer：消息生产者，就是投递消息的程序。
+* consumer：消息消费者，就是接受消息的程序。
+* channel：消息通道，在客户端的每个连接里，可建立多个channel，每个channel代表一个会话任务。
+</code></pre>
+<h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><pre><code>AMQP模型中，消息在producer中产生，发送到MQ的exchange上，exchange根据配置的路由方式发到相应的Queue上，Queue又将消息发送给consumer，消息从queue到consumer有push和pull两种方式。 消息队列的使用过程大概如下：
+
+1. 客户端连接到消息队列服务器，打开一个channel。
+2. 客户端声明一个exchange，并设置相关属性。
+3. 客户端声明一个queue，并设置相关属性。
+4. 客户端使用routing key，在exchange和queue之间建立好绑定关系。
+5. 客户端投递消息到exchange。
+
+exchange接收到消息后，就根据消息的key和已经设置的binding，进行消息路由，将消息投递到一个或多个队列里。 exchange也有几个类型，完全根据key进行投递的叫做Direct交换机，例如，绑定时设置了routing key为”abc”，那么客户端提交的消息，只有设置了key为”abc”的才会投递到队列。
+</code></pre>
+
       
     </div>
     
@@ -373,17 +402,41 @@
     
 
     
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Eason
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/2021/06/29/RabbitMq/" title="RabbitMq学习">http://example.com/2021/06/29/RabbitMq/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%B7%A5%E5%85%B7/" rel="tag"># 工具</a>
+          
+        </div>
+      
+
+      
+      
+      
 
       
 
       
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -393,10 +446,11 @@
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -404,6 +458,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -424,8 +482,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -499,6 +566,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#RabbitMq-%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.</span> <span class="nav-text">RabbitMq 学习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%AE%89%E8%A3%85"><span class="nav-number">1.1.</span> <span class="nav-text">一、安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81php%E6%89%A9%E5%B1%95%E5%AE%89%E8%A3%85"><span class="nav-number">1.2.</span> <span class="nav-text">二、php扩展安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E4%BD%BF%E7%94%A8"><span class="nav-number">1.3.</span> <span class="nav-text">三、使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B"><span class="nav-number">1.3.1.</span> <span class="nav-text">流程</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -645,6 +728,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
